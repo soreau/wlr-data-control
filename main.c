@@ -73,8 +73,7 @@ static const struct wl_registry_listener registry_listener = {
 
 // Called when selection is highlighted or copied by user
 static void receive_data(void *data,
-	struct zwlr_data_control_offer_v1 *zwlr_data_control_offer_v1,
-	const char *type)
+	struct zwlr_data_control_offer_v1 *zwlr_data_control_offer_v1)
 {
 	char buf[4096];
 	FILE *mem_fp;
@@ -88,7 +87,7 @@ static void receive_data(void *data,
 		return;
 	}
 
-	zwlr_data_control_offer_v1_receive(zwlr_data_control_offer_v1, type, pipe_fd[1]);
+	zwlr_data_control_offer_v1_receive(zwlr_data_control_offer_v1, mime_type, pipe_fd[1]);
 	wl_display_flush(display);
 	close(pipe_fd[1]);
 
@@ -148,7 +147,7 @@ static void data_control_device_selection(void *data,
 	struct zwlr_data_control_offer_v1 *id)
 {
 	if (id && offer == id) {
-		receive_data(data, id, mime_type);
+		receive_data(data, id);
 		offer = NULL;
 	}
 }
@@ -164,7 +163,7 @@ static void data_control_device_primary_selection(void *data,
 	struct zwlr_data_control_offer_v1 *id)
 {
 	if (id && offer == id) {
-		receive_data(data, id, mime_type);
+		receive_data(data, id);
 		offer = NULL;
 	}
 }
