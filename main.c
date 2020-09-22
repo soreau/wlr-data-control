@@ -237,6 +237,8 @@ int main()
 	device = zwlr_data_control_manager_v1_get_data_device(manager, seat);
 	zwlr_data_control_device_v1_add_listener(device, &data_control_device_listener, NULL);
 
+	wl_display_roundtrip(display);
+
 	cb_data = strdup("Test copy/paste string");
 	if (!cb_data) {
 		fprintf(stderr, "%m\n");
