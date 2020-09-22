@@ -100,7 +100,8 @@ static void receive_data(void *data,
 
 	fprintf(stderr, "calling read()\n");
 	while ((ret = read(pipe_fd[0], &buf, sizeof(buf))) > 0)
-		fwrite(&buf, 1, ret, mem_fp);
+		if (fwrite(&buf, 1, ret, mem_fp) != ret)
+			break;
 
 	fclose(mem_fp);
 	fprintf(stderr, "read() complete: read %ld bytes\n", mem_size);
